@@ -18,7 +18,7 @@ jobs:
 
       - name: Build image
         run: |
-          cd rust-actix-web-example
+          # cd rust-actix-web-example
           podman build -t rust-actix-web .
 
       # GitHub Packages struggles with the capitals in the UCBoulder org name
