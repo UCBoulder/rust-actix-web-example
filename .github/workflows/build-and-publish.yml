@@ -1,0 +1,32 @@
+# This workflow runs any time a change is merged into the `main` branch of your
+# repository. It builds the container image, then pushes it to GitHub Packages.
+
+name: Build and Publish
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build and push image
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v3
+
+      - name: Build image
+        run: |
+          cd sources
+          podman build -t rust-actix-web .
+
+      # GitHub Packages struggles with the capitals in the UCBoulder org name
+      - name: Downcase repo path
+        run: |
+          echo "REPO=ghcr.io/${GITHUB_REPOSITORY,,}" >>${GITHUB_ENV}
+
+      - name: Push image to GH packages
+        run: |
+          podman login ghcr.io -u ${{ github.actor }} -p ${{ secrets.GITHUB_TOKEN }}
+          podman push rust-actix-web ${{ env.REPO }}/rust-actix-web:latest
