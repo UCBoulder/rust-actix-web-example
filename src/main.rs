@@ -52,7 +52,6 @@ async fn download_blob(data: Data<AppState>) -> impl Responder {
     match contents {
         Ok(s) =>  { 
             HttpResponse::Ok()
-                .insert_header(ContentEncoding::Identity)
                 .body(s) 
         }
         Err(e) => { HttpResponse::NotFound().body(e.to_string()) }
