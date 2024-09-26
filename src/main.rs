@@ -46,6 +46,8 @@ async fn download_blob_non_compressed(data: Data<AppState>) -> impl Responder {
     }
 }
 
+
+
 #[get("/download-blob")]
 async fn download_blob(data: Data<AppState>) -> impl Responder {
     let contents = fs::read_to_string(&data.test_file_path);
@@ -57,6 +59,13 @@ async fn download_blob(data: Data<AppState>) -> impl Responder {
         Err(e) => { HttpResponse::NotFound().body(e.to_string()) }
     }
 }
+
+#[get("/test")]
+async fn test(data: Data<AppState>) -> impl Responder {
+    let contents = &data.test_file_path;
+    HttpResponse::Ok().body(contents.to_string())
+}
+
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
