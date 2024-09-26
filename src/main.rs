@@ -95,6 +95,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(Logger::default())
             .service(download_blob)
             .service(download_blob_non_compressed)
+            .service(test)
     })
     .bind(("0.0.0.0", 8080))?
     .run()
